@@ -13,6 +13,19 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+@font-face {
+  font-family: 'Kenia';
+  src: url('/fonts/Kenia/Kenia-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --breakpoint-smd: 56.25rem;
+  --font-kenia: 'Kenia';
+}
+
 code {
   font-family:
     source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
@@ -25,8 +38,8 @@ code {
   --card-foreground: oklch(0.141 0.005 285.823);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.141 0.005 285.823);
-  --primary: oklch(0.21 0.006 285.885);
-  --primary-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.378 0.0373 157.35);
+  --primary-foreground: oklch(0.9621 0.0069 174.38);
   --secondary: oklch(0.967 0.001 286.375);
   --secondary-foreground: oklch(0.21 0.006 285.885);
   --muted: oklch(0.967 0.001 286.375);

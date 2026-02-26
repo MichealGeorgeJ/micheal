@@ -1,126 +1,193 @@
-// components/pages/About.tsx
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+// pages/about.tsx   or   components/About.tsx
+
+import React from 'react';
+import { motion } from 'framer-motion';
 
 export default function About() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"]
-  });
-
-  // Different parallax speeds
-  const bgY       = useTransform(scrollYProgress, [0, 1], [0, 220]);
-  const photoY    = useTransform(scrollYProgress, [0, 1], [-60, 180]);
-  const contentY  = useTransform(scrollYProgress, [0, 0.7], [0, -140]);
-  const blob1Y    = useTransform(scrollYProgress, [0, 1], [0, 340]);
-  const blob2Y    = useTransform(scrollYProgress, [0, 1], [0, -260]);
-
-  const container = {
+  const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.14, delayChildren: 0.3 }
-    }
+      transition: { staggerChildren: 0.14, delayChildren: 0.25 },
+    },
   };
 
-  const item = {
-    hidden: { y: 50, opacity: 0, filter: "blur(8px)" },
+  const itemVariants = {
+    hidden: { opacity: 0, y: 40, scale: 0.94, filter: 'blur(8px)' },
     visible: {
-      y: 0,
       opacity: 1,
-      filter: "blur(0px)",
-      transition: { duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }
-    }
+      y: 0,
+      scale: 1,
+      filter: 'blur(0px)',
+      transition: { duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] },
+    },
   };
+
+  const photoVariants = {
+    hidden: { opacity: 0, scale: 0.85, y: 60, filter: 'blur(10px)' },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      filter: 'blur(0px)',
+      transition: { duration: 1.2, ease: [0.34, 1.56, 0.64, 1] },
+    },
+  };
+
+  const timeline = [
+    {
+      period: '2023 – Present',
+      role: 'Full-Stack Developer',
+      company: 'Freelance & Product Teams',
+      description:
+        'Building modern web applications with Next.js, TypeScript, Node.js / NestJS, PostgreSQL and real-time features for startups and small-to-medium businesses.',
+    },
+    {
+      period: '2022 – 2023',
+      role: 'Junior Full-Stack Developer',
+      company: 'Web Development Agency / Startup',
+      description:
+        'Developed and maintained multiple client projects using MERN stack, integrated payment gateways, optimized performance and collaborated in agile teams.',
+    },
+    {
+      period: '2021',
+      role: 'Self-learning & First Projects',
+      company: '',
+      description:
+        'Intensive self-study of JavaScript, React, Node.js and modern frontend/backend tooling — turned hobby coding into production-ready applications.',
+    },
+  ];
 
   return (
-    <div ref={ref} className="relative min-h-screen bg-slate-950 overflow-hidden pb-24">
-      {/* Background layers with different speeds */}
-      <motion.div className="fixed inset-0 pointer-events-none" style={{ y: bgY }}>
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-purple-950/20 to-slate-950" />
-      </motion.div>
+    <div className="min-h-screen bg-slate-950 relative overflow-hidden">
+      {/* Animated background orbs – matching landing page */}
+      <div className="fixed inset-0 pointer-events-none">
+        <motion.div
+          className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/30 rounded-full blur-[120px]"
+          animate={{ scale: [1, 1.18, 1], x: [0, 50, 0], y: [0, -30, 0] }}
+          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/30 rounded-full blur-[120px]"
+          animate={{ scale: [1, 1.28, 1], x: [0, -50, 0], y: [0, 30, 0] }}
+          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute top-1/3 left-1/2 -translate-x-1/2 w-80 h-80 bg-yellow-500/20 rounded-full blur-[100px]"
+          animate={{ scale: [1, 1.4, 1], rotate: [0, 360] }}
+          transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+        />
+      </div>
 
-      <motion.div style={{ y: blob1Y }} className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-blue-700/15 rounded-full blur-3xl" />
-      </motion.div>
+      {/* Grid overlay */}
+      <div
+        className="fixed inset-0 opacity-20 pointer-events-none"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+        }}
+      />
 
-      <motion.div style={{ y: blob2Y }} className="fixed inset-0 pointer-events-none">
-        <div className="absolute bottom-[-15%] right-[-15%] w-[900px] h-[900px] bg-purple-700/20 rounded-full blur-3xl" />
-      </motion.div>
-
-      {/* Floating photo – stronger parallax */}
-      <div className="relative z-10 pt-16 md:pt-24 px-6 md:px-12 lg:px-20">
-        <div className="max-w-6xl mx-auto">
+      <div className="relative py-20 px-6 md:px-10 lg:px-16">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className=" mx-auto"
+        >
+          {/* Main glass card */}
           <motion.div
-            style={{ y: photoY }}
-            className="mb-16 md:mb-24 flex justify-center"
+            variants={itemVariants}
+            className="rounded-3xl p-8 md:p-12 lg:p-16 bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl"
           >
-            <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full overflow-hidden border-4 border-white/10 shadow-2xl shadow-purple-900/50">
-              <img
-                src="/images/profile.png"
-                alt="Micheal George"
-                className="w-full h-full object-cover scale-110"
-              />
+            <div className="grid lg:grid-cols-5 gap-12 lg:gap-16">
+  
+
+              {/* Right: Content */}
+              <div className="lg:col-span-3 space-y-10 text-gray-200">
+                <motion.h1
+                  variants={itemVariants}
+                  className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight"
+                >
+                  <span className="block text-white">About</span>
+                  <span className="bg-gradient-to-r from-yellow-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
+                    Micheal George
+                  </span>
+                </motion.h1>
+
+                <motion.p variants={itemVariants} className="text-lg md:text-xl leading-relaxed text-gray-300">
+                  I'm a full-stack developer based in Chennai with over 3 years of experience building modern, scalable web applications. 
+                  I enjoy solving real problems with clean code, thoughtful design, and reliable architecture.
+                </motion.p>
+
+                <motion.p variants={itemVariants} className="text-lg leading-relaxed text-gray-400">
+                  My focus is on creating fast, maintainable products using TypeScript, React/Next.js ecosystems on the front-end 
+                  and Node.js-based services (Express / NestJS) with PostgreSQL or MongoDB on the back-end.
+                </motion.p>
+
+                {/* Journey / Timeline */}
+                <motion.div variants={itemVariants} className="pt-4">
+                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-8">My Journey</h2>
+
+                  <div className="space-y-10">
+                    {timeline.map((entry, index) => (
+                      <motion.div
+                        key={entry.period}
+                        initial={{ opacity: 0, x: -30 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 1.1 + index * 0.25, duration: 0.7 }}
+                        className="relative pl-8 border-l-2 border-yellow-500/40 pb-2"
+                      >
+                        <div className="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-yellow-500/50 border-2 border-yellow-400" />
+                        <p className="text-sm md:text-base text-yellow-400 font-medium tracking-wide">
+                          {entry.period}
+                        </p>
+                        <h3 className="text-xl md:text-2xl font-bold text-white mt-1">
+                          {entry.role}
+                        </h3>
+                        {entry.company && (
+                          <p className="text-gray-500 mt-0.5">{entry.company}</p>
+                        )}
+                        <p className="mt-3 text-gray-300 leading-relaxed">{entry.description}</p>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+
+                {/* Call to action */}
+                <motion.div
+                  variants={itemVariants}
+                  className="flex flex-col sm:flex-row gap-5 pt-8"
+                >
+                  <motion.a
+                    href="#projects"
+                    className="px-8 py-4 bg-gradient-to-r from-yellow-500 to-yellow-400 text-black font-bold rounded-xl shadow-xl shadow-yellow-500/30 relative overflow-hidden group inline-flex items-center justify-center"
+                    whileHover={{ scale: 1.04, boxShadow: '0 25px 50px -12px rgba(234, 179, 8, 0.5)' }}
+                    whileTap={{ scale: 0.97 }}
+                  >
+                    <span className="relative z-10">See My Projects</span>
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-yellow-300"
+                      initial={{ x: '-100%' }}
+                      whileHover={{ x: 0 }}
+                      transition={{ duration: 0.45 }}
+                    />
+                  </motion.a>
+
+                  <motion.a
+                    href="mailto:hello@michealgeorge.dev"
+                    className="px-8 py-4 bg-white/5 border border-white/20 text-white font-bold rounded-xl hover:bg-white/10 transition-all backdrop-blur-sm inline-flex items-center justify-center"
+                    whileHover={{ scale: 1.04 }}
+                    whileTap={{ scale: 0.97 }}
+                  >
+                    Let's Connect
+                  </motion.a>
+                </motion.div>
+              </div>
             </div>
           </motion.div>
-
-          {/* Main content with parallax */}
-          <motion.div
-            style={{ y: contentY }}
-            variants={container}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            className="max-w-4xl mx-auto space-y-16 md:space-y-24 text-gray-200"
-          >
-            <motion.section variants={item}>
-              <h2 className="text-4xl md:text-5xl font-black mb-6 bg-gradient-to-r from-yellow-300 via-purple-400 to-blue-300 bg-clip-text text-transparent">
-                About Me
-              </h2>
-              <p className="text-lg md:text-xl leading-relaxed">
-                I'm Micheal George, a full-stack developer from Tamil Nadu, India.
-                I build modern, fast and user-friendly web applications — from thoughtful UI/UX to scalable backends.
-              </p>
-              <p className="text-lg md:text-xl leading-relaxed mt-6">
-                I enjoy turning ideas into clean, maintainable code and beautiful interfaces.
-              </p>
-            </motion.section>
-
-            <motion.section variants={item}>
-              <h3 className="text-3xl font-bold mb-8 text-white">Current Stack</h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
-                {[
-                  'React • Next.js', 'TypeScript', 'Tailwind', 'Node.js', 'Express',
-                  'PostgreSQL', 'Prisma', 'AWS / Vercel', 'Framer Motion', 'Figma'
-                ].map((tech) => (
-                  <div
-                    key={tech}
-                    className="bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-center backdrop-blur-sm hover:border-purple-400/50 transition-colors"
-                  >
-                    {tech}
-                  </div>
-                ))}
-              </div>
-            </motion.section>
-
-            <motion.section variants={item}>
-              <h3 className="text-3xl font-bold mb-8 text-white">Beyond the Screen</h3>
-              <p className="text-lg md:text-xl leading-relaxed">
-                Chess • Sci-fi books • Photography • Open source • Good coffee • Learning new tools and patterns
-              </p>
-            </motion.section>
-
-            <motion.div variants={item} className="pt-8">
-              <a
-                href="mailto:your.email@example.com"
-                className="inline-flex items-center gap-3 px-8 py-5 bg-gradient-to-r from-yellow-500 to-purple-600 text-white font-bold rounded-2xl shadow-xl shadow-purple-700/30 hover:brightness-110 transition-all text-lg"
-              >
-                Let's create something great →
-              </a>
-            </motion.div>
-          </motion.div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ import Header from '../components/pages/Header'
 import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
+import CursorBall from '@/components/ui/Cursorball'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -49,6 +50,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body >
         {children}
+        <CursorBall />
         <Scripts />
       </body>
     </html>
